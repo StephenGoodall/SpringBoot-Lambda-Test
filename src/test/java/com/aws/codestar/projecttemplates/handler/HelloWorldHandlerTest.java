@@ -57,7 +57,7 @@ public class HelloWorldHandlerTest {
 
         // Verify the response obtained matches the values we expect.
         JSONObject jsonObjectFromResponse = new JSONObject(response.getBody());
-        assertTrue(jsonObjectFromResponse.get("Output").matches(EXPECTED_RESPONSE_VALUE + ".*"));
+        assertTrue(jsonObjectFromResponse.get("Output").startsWith(EXPECTED_RESPONSE_VALUE));
         assertEquals(EXPECTED_CONTENT_TYPE, response.getHeaders().get("Content-Type"));
         assertEquals(EXPECTED_STATUS_CODE_SUCCESS, response.getStatusCode());
     }
