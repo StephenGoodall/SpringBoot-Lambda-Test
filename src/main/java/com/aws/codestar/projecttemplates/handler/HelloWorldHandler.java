@@ -15,8 +15,12 @@ import java.util.Map;
 public class HelloWorldHandler implements RequestHandler<Object, Object> {
 
     public Object handleRequest(final Object input, final Context context) {
+        
+        Instant instant = Instant.now();
+        long timeStampMillis = instant.toEpochMilli();
+
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
-        return new GatewayResponse(new JSONObject().put("Output", "Hello World!").toString(), headers, 200);
+        return new GatewayResponse(new JSONObject().put("Output", "The Current time is: " + timeStampMillis).toString(), headers, 200);
     }
 }
