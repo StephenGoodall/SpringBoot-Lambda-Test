@@ -26,6 +26,16 @@ public class HelloWorldHandlerTest {
     // A mock class for com.amazonaws.services.lambda.runtime.Context
     private final MockLambdaContext mockLambdaContext = new MockLambdaContext();
     private final Object input = new Object();
+    
+    /**
+    * @param text Text to test
+    * @param pattern (Wildcard) pattern to test
+    * @return True if the text matches the wildcard pattern
+    */
+    public static boolean match(String text, String pattern)
+    {
+        return text.matches(pattern.replace("?", ".?").replace("*", ".*?"));
+    }
 
     /**
      * Initializing variables before we run the tests.
@@ -57,7 +67,7 @@ public class HelloWorldHandlerTest {
 
         // Verify the response obtained matches the values we expect.
         JSONObject jsonObjectFromResponse = new JSONObject(response.getBody());
-        assertTrue((String) jsonObjectFromResponse.get("Output").startsWith(EXPECTED_RESPONSE_VALUE));
+        assertTrue(match(jsonObjectFromResponse.get("Output"), EXPECTED_RESPONSE_VALUE + "*"));
         assertEquals(EXPECTED_CONTENT_TYPE, response.getHeaders().get("Content-Type"));
         assertEquals(EXPECTED_STATUS_CODE_SUCCESS, response.getStatusCode());
     }
