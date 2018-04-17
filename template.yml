@@ -104,7 +104,7 @@ Resources:
               produces:
               - "application/json"
               responses:
-                200:
+                "200":
                   description: "OK"
             get:
               tags:
@@ -115,7 +115,7 @@ Resources:
               produces:
               - "application/json"
               responses:
-                200:
+                "200":
                   description: "OK"
           /es:
             post:
@@ -127,7 +127,7 @@ Resources:
               produces:
               - "application/json"
               responses:
-                200:
+                "200":
                   description: "OK"
             get:
               tags:
@@ -138,7 +138,7 @@ Resources:
               produces:
               - "application/json"
               responses:
-                200:
+                "200":
                   description: "OK"
           /date:
             post:
@@ -150,7 +150,7 @@ Resources:
               produces:
               - "application/json"
               responses:
-                200:
+                "200":
                   description: "OK"
         externalDocs:
           description: "Find out more about Swagger"
