@@ -23,6 +23,7 @@ Resources:
           Properties:
             Path: /
             Method: get
+            RestApiId: !Ref WebAppApi
 
   GetHelloWorldES:
     Type: AWS::Serverless::Function
@@ -38,6 +39,7 @@ Resources:
           Properties:
             Path: /es
             Method: get
+            RestApiId: !Ref WebAppApi
             
   PostHelloWorld:
     Type: AWS::Serverless::Function
@@ -53,6 +55,7 @@ Resources:
           Properties:
             Path: /
             Method: post
+            RestApiId: !Ref WebAppApi
 
   GetDate:
     Type: AWS::Serverless::Function
@@ -68,3 +71,91 @@ Resources:
           Properties:
             Path: /date
             Method: get
+            RestApiId: !Ref WebAppApi
+            
+  WebAppApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      DefinitionBody:
+        swagger: "2.0"
+        info:
+          description: "This is a test API using Codestar and AWS SAM."
+          version: "1.0.0"
+          title: "Codestar Test"
+          termsOfService: "http://swagger.io/terms/"
+          contact:
+            email: "stephen.goodall@oneadvanced.com"
+          license:
+            name: "Apache 2.0"
+            url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+        host: "bs0fi97l5g.execute-api.eu-west-1.amazonaws.com"
+        basePath: "/Prod"
+        schemes:
+        - "http"
+        paths:
+          /:
+            post:
+              tags:
+              - "HelloWorld"
+              summary: "Get the current time"
+              description: "Returns current time as an Epoch"
+              operationId: "helloWorldPOST"
+              produces:
+              - "application/json"
+              responses:
+                200:
+                  description: "OK"
+            get:
+              tags:
+              - "HelloWorld"
+              summary: "Get the current time"
+              description: "Returns current time as an Epoch"
+              operationId: "helloWorldGET"
+              produces:
+              - "application/json"
+              responses:
+                200:
+                  description: "OK"
+          /es:
+            post:
+              tags:
+              - "HelloWorldES"
+              summary: "Get the current time in Spanish"
+              description: "Returns current time as an Epoch - Spanish message"
+              operationId: "helloWorldESPOST"
+              produces:
+              - "application/json"
+              responses:
+                200:
+                  description: "OK"
+            get:
+              tags:
+              - "HelloWorldES"
+              summary: "Get the current time in Spanish"
+              description: "Returns current time as an Epoch - Spanish message"
+              operationId: "helloWorldESGET"
+              produces:
+              - "application/json"
+              responses:
+                200:
+                  description: "OK"
+          /date:
+            post:
+              tags:
+              - "date"
+              summary: "Get the current date"
+              description: "Returns current Date"
+              operationId: "date"
+              produces:
+              - "application/json"
+              responses:
+                200:
+                  description: "OK"
+        externalDocs:
+          description: "Find out more about Swagger"
+          url: "http://swagger.io"
+Outputs:
+  webappApiEndpoint:
+    Description: WebApp URL for application
+    Value: !Sub "https://${WebAppApi}.execute-api.${AWS::Region}.amazonaws.com/prod/"
