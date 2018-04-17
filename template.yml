@@ -57,6 +57,22 @@ Resources:
             Method: post
             RestApiId: !Ref WebAppApi
 
+  PostHelloWorldES:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.aws.codestar.projecttemplates.handler.HelloWorldHandler::handleRequestES
+      Runtime: java8
+      Role:
+        Fn::ImportValue:
+          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
+      Events:
+        PostEvent:
+          Type: Api
+          Properties:
+            Path: /es
+            Method: post
+            RestApiId: !Ref WebAppApi
+
   GetDate:
     Type: AWS::Serverless::Function
     Properties:
@@ -106,6 +122,10 @@ Resources:
               responses:
                 "200":
                   description: "OK"
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PostHelloWorld.Arn}/invocations"
             get:
               tags:
               - "HelloWorld"
@@ -117,6 +137,10 @@ Resources:
               responses:
                 "200":
                   description: "OK"
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetHelloWorld.Arn}/invocations"
           /es:
             post:
               tags:
@@ -129,6 +153,10 @@ Resources:
               responses:
                 "200":
                   description: "OK"
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PostHelloWorldES.Arn}/invocations"
             get:
               tags:
               - "HelloWorldES"
@@ -140,6 +168,10 @@ Resources:
               responses:
                 "200":
                   description: "OK"
+              x-amazon-apigateway-integration:
+                httpMethod: GET
+                type: aws_proxy
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetHelloWorldES.Arn}/invocations"
           /date:
             post:
               tags:
@@ -152,6 +184,10 @@ Resources:
               responses:
                 "200":
                   description: "OK"
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetDate.Arn}/invocations"
         externalDocs:
           description: "Find out more about Swagger"
           url: "http://swagger.io"
